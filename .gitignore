@@ -1,0 +1,26 @@
+# secrets / credentials — never commit real material
+client_secret.json
+**/client_secret.json
+**/.encryption_key
+**/*.pem
+**/*.p12
+.env
+.env.*
+**/credentials.json
+**/credentials.enc
+**/token_cache.json
+**/*credentials*.json
+**/*token*.json
+
+# OS / editor
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# scratch artifacts
+*.jsonl
+
+# repo-scoped temp dir (commit/PR bodies, working files)
+tmp/
