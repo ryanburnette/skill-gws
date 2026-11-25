@@ -63,6 +63,8 @@ project.
 - Do **not** trust `resultSizeEstimate`; use `labels.get` or paginated id counts.
 - UI tabs ≠ folders; use `in:inbox category:…` for tab semantics.
 - `gmail.modify` can **send** mail — not “organize only.”
+- Preserve `UNREAD` while reading; mark mail read only when the user asks (see [Gmail reading](./gmail/reading.md)).
+- Confirm the exact calendar id and effective access before acting; `owner` access does not make a shared calendar `primary` (see [calendar identity](./calendar/calendars-and-sharing.md)).
 - Testing-mode OAuth: limited scopes (`-s gmail,drive,…`); avoid full recommended set on consumer accounts (~25 scope cap; Workspace-only scopes break personal login).
 - Large mailboxes: always bound `maxResults` (≤500) / `q`; avoid casual `--page-all`.
 - List existing **filters** before automating rules that might conflict.

@@ -93,19 +93,52 @@ still send some mail.
 | Type | Where it works |
 |------|----------------|
 | `default` | any writable calendar |
-| `outOfOffice` | **primary only** |
-| `focusTime` | **primary only** |
-| `workingLocation` | Workspace / feature-flagged accounts |
+| `outOfOffice` | eligible users' primary calendars |
+| `focusTime` | eligible users' primary calendars |
+| `workingLocation` | eligible users' primary calendars |
 | `birthday` | special all-day annual; mostly read |
 | `fromGmail` | created by Gmail; mostly read |
 
 Consumer accounts reject `workingLocation` with a malformed-event error.
 Do not probe OOO / focus on primary unless the user wants that block.
 
+### Status events on shared calendars
+
+The [status-events guide](https://developers.google.com/workspace/calendar/api/guides/calendar-status)
+distinguishes primary calendars from secondary calendars: secondary calendars
+cannot contain status events. A primary calendar shared by another user is
+still that user's primary calendar, even though it is not the authenticated
+user's `primary` alias. The guide documents reading status events on another
+user's calendar by id with at least free/busy access.
+
+Read access does **not** authorize deletion. Before any status-event write,
+check the target calendar, effective access, OAuth scopes, and feature
+eligibility; do not test support by inserting an unwanted block. The
+[delete method](https://developers.google.com/workspace/calendar/api/v3/reference/events/delete)
+takes a `calendarId` and `eventId`, but that is not permission to delete from
+every calendar the account can read. See [calendar access roles](./calendars-and-sharing.md).
+
+Out-of-office events use timed `start.dateTime` and `end.dateTime`; the guide
+does not support all-day out-of-office events. Midnight boundaries alone do
+not imply `date` fields. Inspect both the time fields and `eventType` when
+classifying events; elapsed duration alone does not establish their meaning.
+
 Other write fields worth knowing: `visibility` (`default` / `public` /
 `private` / `confidential`), `transparency` (`opaque` blocks busy,
 `transparent` does not), `status`, `colorId`, `recurrence`, `attendees[]`,
 `guestsCanInviteOthers` / `Modify` / `SeeOtherGuests`.
+
+## Extended properties and visible fields
+
+`extendedProperties` stores hidden application metadata, separate from
+`summary` and `description`. Patching only metadata does not change those
+visible fields. Which information belongs in a title or description is a
+user/workflow decision, not an API requirement.
+
+`extendedProperties.shared` is visible and editable by all event attendees
+through the API; it is not a place for secrets. `extendedProperties.private`
+is specific to the event copy addressed by `calendarId` and `eventId`.
+See Google's [extended-properties guide](https://developers.google.com/workspace/calendar/api/guides/extended-properties).
 
 ## Patch vs update
 
