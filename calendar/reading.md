@@ -130,9 +130,12 @@ gws calendar events list --params '{
 `"default"` · `"birthday"` · `"focusTime"` · `"fromGmail"` ·
 `"outOfOffice"` · `"workingLocation"`
 
-Omitting `eventTypes` returns only `default`. Out of office, focus time,
-working location, birthdays, and from-Gmail events are absent from the list
-until you pass those types.
+Omitting `eventTypes` returns **all event types**, according to the
+[events.list reference](https://developers.google.com/workspace/calendar/api/v3/reference/events/list).
+Setting `eventTypes: ["default"]` restricts the response to regular events.
+Inspect `eventType` in the returned resources rather than inferring it from
+the title. If an expected event is missing, check the exact `calendarId`,
+time window, pagination, and explicit filters before concluding it is absent.
 
 `iCalUID` finds an event by its iCalendar UID (what `events.import` needs).
 That is not the same as the Google `id`.

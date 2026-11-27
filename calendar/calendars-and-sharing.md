@@ -28,6 +28,16 @@ Useful list fields: `id`, `summary`, `summaryOverride`, `primary`,
 `accessRole`, `selected`, `hidden`, `colorId`, `backgroundColor`,
 `timeZone`, `defaultReminders`, `conferenceProperties`.
 
+`primary` aliases the authenticated user's primary calendar. Another user's
+shared primary calendar has its own id; use that exact id for event calls.
+Check `id`, `summary`, and the `primary` flag instead of treating an
+`accessRole: "owner"` entry as the authenticated user's primary calendar.
+Matching titles do not make events on different calendars the same event.
+Sharing alone does not automatically add a calendar to `calendarList`.
+
+References: [CalendarList resource](https://developers.google.com/workspace/calendar/api/v3/reference/calendarList)
+and [calendar sharing](https://developers.google.com/workspace/calendar/api/concepts/sharing).
+
 `hidden: true` is omitted when the calendar is visible. `selected: false`
 is omitted when unselected. Do not treat a missing flag as unknown — treat
 missing `hidden` as visible.

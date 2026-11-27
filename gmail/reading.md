@@ -12,6 +12,17 @@ Start from [overview.md](./overview.md) for the full surface map.
 
 Write helpers need explicit user intent: [compose.md](./compose.md).
 
+### Reading preserves unread state
+
+`+triage` and `users.messages.get` are read-only; fetching `format: "full"`
+does not remove `UNREAD`. Marking a message read is a separate label mutation,
+such as `users.messages.modify` with `removeLabelIds: ["UNREAD"]`, and needs
+the user's intent. Do not add that mutation as a side effect of reading.
+
+References: [messages.get](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/get),
+[messages.modify](https://developers.google.com/workspace/gmail/api/reference/rest/v1/users.messages/modify),
+and the upstream [+triage implementation](https://github.com/googleworkspace/cli/blob/8e945eed02a8230af122ec6247cc218d28c1f1ce/crates/google-workspace-cli/src/helpers/gmail/triage.rs).
+
 ### +triage
 
 Default query is **`is:unread`** (mailbox-wide), **not** Primary and not
